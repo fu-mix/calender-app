@@ -69,18 +69,30 @@ interface Schedule {
 }
 ```
 
+```ts
+interface CalData {
+  today: {
+    year: string;
+    month: string;
+    day: string;
+    date: string;
+  };
+  schedules: Schedule[];
+}
+```
+
 ## store
 
 ```ts
 const initialState {
-    today: {
+    today :{
         year:"",
         month:"",
         data:"",
         day:""
     }
     schedules: []
-}
+} as CalData
 ```
 
 ## バックエンド
