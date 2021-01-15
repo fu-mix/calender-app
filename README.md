@@ -1,6 +1,6 @@
 # Calendar アプリ　仕様
 
-## コンポーネント
+# コンポーネント
 
 - Navigation
   - タイトル
@@ -20,7 +20,7 @@
   - 渡された予定を表示する
   - 選択するとスケジュール入力モーダルを表示する
 
-## インターフェース
+# インターフェース
 
 - Navigation
 
@@ -53,46 +53,105 @@
 | -------- | ------ |
 | schedule | string |
 
-## types
+# types
 
 - スケジュール情報
 
 ```ts
 interface Schedule {
-  year: string;
-  month: string;
-  date: string;
-  day: string;
+  id: number;
+  date: ISOString;
   title: string;
-  place: string;
-  note: string;
+  location: string;
+  description: string;
 }
 ```
 
 ```ts
-interface CalData {
-  today: {
-    year: string;
-    month: string;
-    day: string;
-    date: string;
-  };
+interface ScheduleData {
   schedules: Schedule[];
 }
 ```
 
-## store
+# store
 
 ```ts
 const initialState {
-    today :{
-        year:"",
-        month:"",
-        data:"",
-        day:""
-    }
     schedules: []
-} as CalData
+} as ScheduleData
 ```
 
-## バックエンド
+# バックエンド
+
+下記のバックエンドアプリを利用。
+後々は GraphQL で作り直したい。
+https://github.com/Dragon-taro/calender-app/tree/master/server
+
+## 仕様
+
+### 特定の月の予定を全件取得
+
+```
+GET /schedules
+```
+
+### パラメーター
+
+| name  | type   | require |
+| ----- | ------ | ------- |
+| month | number | yes     |
+| year  | number | yes     |
+
+### 例
+
+```
+$ curl -X GET "localhost:8080/api/schedules?month=1&year=2021"
+```
+
+### 予定の追加
+
+```
+POST /schedules
+```
+
+### パラメーター
+
+| name        | type      | require |
+| ----------- | --------- | ------- |
+| title       | string    | yes     |
+| data        | ISOString | yes     |
+| description | string    | no      |
+| location    | string    | no      |
+
+### 例
+
+```
+$ curl -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"title": "会議", "description": "経営戦略について", "date": "2019-11-11T15:54:14.000Z", "location": "会議室A"}' \
+  "localhost:8080/api/schedules"
+```
+
+### 予定の削除
+
+```
+DELETE /schedules/:id
+```
+
+### パラメーター
+
+| name | type   | require |
+| ---- | ------ | ------- |
+| id   | number | yes     |
+
+### 例
+
+```
+$ curl "localhost:8080/api/schedules/1
+```
+
+### サンプルデータの追加
+
+```
+$ curl -X POST "localhost:8080/api/schedules/create-test-data"
+```
