@@ -59,11 +59,12 @@
 
 ```ts
 interface Schedule {
-  id: number;
+  id: number{
   date: ISOString;
   title: string;
   location: string;
   description: string;
+  }
 }
 ```
 
@@ -75,9 +76,33 @@ interface ScheduleData {
 
 # store
 
+- 構造
+
+```ts
+intarface AppState
+{
+  cache:{
+    schedules:Schdule[]
+  },
+  cal_board:{
+    schedules:Schedule[];
+    modalOpen:boolen
+  }
+}
+
+```
+
+- 初期値
+
 ```ts
 const initialState {
+  cache:{
     schedules: []
+  },
+  cal_board:{
+    schedules:[];
+    modalOpen:false
+  }
 } as ScheduleData
 ```
 
