@@ -24,7 +24,7 @@ export interface setSchedule {
 const actionCreator = actionCreatorFacory();
 export const scheduleActions = {
   fetchScheduleItem: actionCreator<FetchSchedule>('FETCH_SCHEDULE_ITEM'),
-  setScheduleItem: actionCreator<setSchedule>('SET_SCHEDULE_ITEM'),
+  setScheduleItem: actionCreator<Schedule[]>('SET_SCHEDULE_ITEM'),
 };
 
 // Reducer

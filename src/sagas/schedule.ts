@@ -1,6 +1,6 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 import axios from 'axios';
-import { scheduleActions, FetchSchedule } from '../modules/schedule';
+import { scheduleActions, FetchSchedule ,Schedule} from '../modules/schedule';
 import { Action } from 'typescript-fsa';
 
 const API_URL = 'http://localhost:8080/api';
@@ -20,7 +20,7 @@ const getSchedule = (month: string, year: string) => {
 
 function* fetchSchedule(action: Action<FetchSchedule>) {
   try {
-    const schedules = yield call(
+    const schedules:Schedule[] = yield call(
       getSchedule,
       action.payload.month,
       action.payload.year

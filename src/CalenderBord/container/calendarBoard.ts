@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { AppStore } from '../../modules';
 import { scheduleActions, FetchSchedule } from '../../modules/schedule';
-import { ScheduleItem } from '../components/schedule';
+import { CalendarBoard } from '../components/calendarBoard';
 import { Dispatch, Action } from 'redux';
 
 export const mapStateToProps = (state: AppStore) => {
@@ -9,6 +9,7 @@ export const mapStateToProps = (state: AppStore) => {
     schedule: state.schedule,
   };
 };
+
 export const mapDispatchToProps = (dispatch: Dispatch<Action>) => {
   return {
     fetchSchedule: (props: FetchSchedule) => {
@@ -17,9 +18,7 @@ export const mapDispatchToProps = (dispatch: Dispatch<Action>) => {
   };
 };
 
-export type ScheduleProps = ReturnType<typeof mapDispatchToProps> &
+export type CalendarBoardProps = ReturnType<typeof mapDispatchToProps> &
   ReturnType<typeof mapStateToProps>;
 
-const Schedule = connect(mapStateToProps, mapDispatchToProps)(ScheduleItem);
-
-export default Schedule;
+export default connect(mapStateToProps, mapDispatchToProps)(CalendarBoard);
