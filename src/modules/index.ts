@@ -1,10 +1,13 @@
 import { combineReducers } from 'redux';
-import { scheduleReducer, Schedule } from './schedule';
+import { scheduleReducer, ScheduleInititalStateProps } from './schedule';
+import { CalendarReducer, CalendarMonth } from './calendar';
 
 export interface AppStore {
-  schedule: Schedule[];
+  schedule: ScheduleInititalStateProps;
+  calendar: CalendarMonth;
 }
 
 export const rootReducer = combineReducers<AppStore>({
   schedule: scheduleReducer,
+  calendar: CalendarReducer,
 });

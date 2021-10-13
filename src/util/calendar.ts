@@ -1,11 +1,20 @@
 import dayjs from 'dayjs';
+import { CalendarMonth } from '../modules/calendar';
 
-export interface GetMonthProps {
-  year: string;
-  month: string;
-}
+export const createCalendar = ({ year, month }: CalendarMonth) => {
+  const firstDay = getMonth({ year, month });
+  const firstDayIndex = firstDay.day();
 
-export const getMonth = ({ year, month }: GetMonthProps): dayjs.Dayjs => {
+  return Array(35)
+    .fill(0)
+    .map((_, i) => {
+      const diffFromFirstDay = i - firstDayIndex;
+      const day = firstDay.add(diffFromFirstDay, 'day');
+      return day;
+    });
+};
+
+export const getMonth = ({ year, month }: CalendarMonth): dayjs.Dayjs => {
   return dayjs(`${year}-${month}`);
 };
 
@@ -26,12 +35,12 @@ export const formatMonth = (day: dayjs.Dayjs) => ({
   year: day.year(),
 });
 
-export const getNextMonth = (month: GetMonthProps) => {
+export const getNextMonth = (month: CalendarMonth) => {
   const day = getMonth(month).add(1, 'month');
   return formatMonth(day);
 };
 
-export const getPreviousMonth = (month: GetMonthProps) => {
+export const getPreviousMonth = (month: CalendarMonth) => {
   const day = getMonth(month).add(-1, 'month');
   return formatMonth(day);
 };

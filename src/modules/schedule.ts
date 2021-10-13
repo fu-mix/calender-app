@@ -1,38 +1,70 @@
 import actionCreatorFacory from 'typescript-fsa';
 import { reducerWithInitialState } from 'typescript-fsa-reducers';
+import dayjs from 'dayjs';
+import { CalendarMonth } from './calendar';
 
-export interface Schedule {
+export interface ScheduleItem {
   id: number;
-  date: Date;
+  date: dayjs.Dayjs;
   title: string;
   location: string;
   description: string;
 }
 
-export interface FetchSchedule {
-  month: string;
-  year: string;
-}
-export interface setSchedule {
-  title: string;
-  data: Date;
-  description: string;
-  location: string;
+export type DeleteSchedule = Pick<ScheduleItem, 'id'>;
+
+export interface ErrorSchedule {
+  error: any;
 }
 
 // Actions
 const actionCreator = actionCreatorFacory();
 export const scheduleActions = {
-  fetchScheduleItem: actionCreator<FetchSchedule>('FETCH_SCHEDULE_ITEM'),
-  setScheduleItem: actionCreator<Schedule[]>('SET_SCHEDULE_ITEM'),
+  fetchScheduleItem: actionCreator<CalendarMonth>('FETCH_SCHEDULE_ITEM'),
+  addScheduleItem: actionCreator<ScheduleItem>('ADD_SCHEDULE_ITEM'),
+  setScheduleItemList: actionCreator<ScheduleItem[]>('SET_SCHEDULE_ITEM_LIST'),
+  deleteScheduleItem: actionCreator<DeleteSchedule>('DELETE_SCHEDUL_ITEM'),
+  setLoadingSchedule: actionCreator('SETLOADING_SCHEDULE'),
+  AsyncFailureSchedule: actionCreator<ErrorSchedule>('ASYNCFAILURE_SCHEDULE'),
+  ResetErrorSchedule: actionCreator('RESETERROR_SCHEDULE'),
 };
 
 // Reducer
-const initialState: Schedule[] = [];
-export const scheduleReducer = reducerWithInitialState(initialState).case(
-  scheduleActions.setScheduleItem,
-  (state: Schedule[], schedule) => ({
+
+export interface ScheduleInititalStateProps {
+  scheduleItemList: ScheduleItem[];
+  isLoading: boolean;
+  error: any;
+}
+
+const initialState: ScheduleInititalStateProps = {
+  scheduleItemList: [],
+  isLoading: false,
+  error: null,
+};
+
+export const scheduleReducer = reducerWithInitialState(initialState)
+  .case(scheduleActions.setScheduleItemList, (state, scheduleItemList) => ({
     ...state,
-    schedule,
-  })
-);
+    isLoading: false,
+    scheduleItemList,
+  }))
+  .case(scheduleActions.addScheduleItem, (state, scheduleItem) => ({
+    ...state,
+    scheduleList: [...state.scheduleItemList, scheduleItem],
+  }))
+  .case(scheduleActions.setLoadingSchedule, (state) => ({
+    ...state,
+    isLoading: true,
+  }))
+  .case(scheduleActions.AsyncFailureSchedule, (state, error) => ({
+    ...state,
+    error,
+  }))
+  .case(scheduleActions.ResetErrorSchedule, (state) => ({
+    ...state,
+    error: null,
+  }));
+// .default((state) => ({
+//   ...state,
+// }));

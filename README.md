@@ -53,6 +53,14 @@
 | -------- | ------ |
 | schedule | string |
 
+- CalendarElement
+  | name | type |
+  | --------------- | ----------- |
+  | day | dayjs.Dayjs |
+  | month | dayjs.Dayjs |
+  | schedules | Schedule[] |
+  | onClickSchedule | ()=>fn(date:ISOString) |
+
 # types
 
 - スケジュール情報

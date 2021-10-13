@@ -1,16 +1,16 @@
 import * as React from 'react';
-import { Schedule } from '../../modules/schedule';
-import style from './scheduleItem.module.css';
+import { ScheduleItem } from '../../modules/schedule';
+import style from './schedule.module.css';
 
 interface ScheduleProps {
-  schedule: Schedule;
+  schedule: ScheduleItem;
   onClickSchedule: (
-    schedule: Schedule,
+    schedule: ScheduleItem,
     e: React.MouseEvent<HTMLElement, MouseEvent>
   ) => void;
 }
 
-export const ScheduleItem: React.FC<ScheduleProps> = ({
+export const Schedule: React.FC<ScheduleProps> = ({
   schedule,
   onClickSchedule,
 }) => {
@@ -23,4 +23,4 @@ export const ScheduleItem: React.FC<ScheduleProps> = ({
   );
 };
 
-export default ScheduleItem;
+export default Schedule;

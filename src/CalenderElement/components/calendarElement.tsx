@@ -6,18 +6,18 @@ import {
   isSameMonth,
   isFirstDay,
   getMonth,
-  GetMonthProps,
 } from '../../util/calendar';
-import ScheduleItem from '../../ScheduleItem/components/scheduleItem';
+import Schedule from '../../Schedule/components/schedule';
 import style from './calendarElement.module.css';
-import { Schedule } from '../../modules/schedule';
+import { ScheduleItem } from '../../modules/schedule';
+import { CalendarMonth } from '../../modules/calendar';
 
 interface CalendarElementProps {
   day: dayjs.Dayjs;
-  yearMonthObj: GetMonthProps;
-  scheduleList: Schedule[];
+  yearMonthObj: CalendarMonth;
+  scheduleList: ScheduleItem[];
   onClickSchedule: (
-    schedule: Schedule,
+    schedule: ScheduleItem,
     e: React.MouseEvent<HTMLElement, MouseEvent>
   ) => void;
 }
@@ -50,11 +50,7 @@ export const CalendarElement: React.FC<CalendarElementProps> = ({
       </Typography>
       <div className={style.schedules}>
         {scheduleList.map((e) => (
-          <ScheduleItem
-            key={e.id}
-            schedule={e}
-            onClickSchedule={onClickSchedule}
-          />
+          <Schedule key={e.id} schedule={e} onClickSchedule={onClickSchedule} />
         ))}
       </div>
     </div>
