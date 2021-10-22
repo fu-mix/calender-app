@@ -6,6 +6,7 @@ import { CalendarElement } from '../../CalenderElement/components/calendarElemen
 import dayjs from 'dayjs';
 import { ScheduleItem } from '../../modules/schedule';
 import style from './calendarBoard.module.css';
+import AddScheduleDialog from '../../AddSchedlDialog/container/AddScheduleDialog';
 
 const days = ['日', '月', '火', '水', '木', '金', '土'];
 
@@ -18,18 +19,15 @@ const dummy_schedule = {
   description: 'react',
 } as ScheduleItem;
 
-// const cal_dummy2 = [...Array(30)].map(() => ({
-//   date: now,
-//   scheduleList: [dummy_schedule, dummy_schedule],
-// }));
 const handleOnclick = (schedule: ScheduleItem) => {
-  console.log('test', schedule);
+  console.log(schedule);
 };
 
 export const CalendarBoard: React.FC<CalendarBoardProps> = ({
   fetchSchedule,
   calendar,
   month,
+  addScheduleOpen,
 }) => {
   useEffect(() => {
     fetchSchedule();
@@ -51,7 +49,7 @@ export const CalendarBoard: React.FC<CalendarBoardProps> = ({
           </li>
         ))}
         {calendar.map(({ date, scheduleList }) => (
-          <li key={date.toISOString()}>
+          <li key={date.toISOString()} onClick={() => addScheduleOpen()}>
             <CalendarElement
               day={date}
               yearMonthObj={month}
@@ -60,6 +58,7 @@ export const CalendarBoard: React.FC<CalendarBoardProps> = ({
             />
           </li>
         ))}
+        <AddScheduleDialog />
       </GridList>
     </div>
   );

@@ -6,6 +6,7 @@ import { CalendarBoard } from '../components/calendarBoard';
 import { Dispatch, Action } from 'redux';
 import { setSchedule } from '../../util/schedule';
 import { createCalendar } from '../../util/calendar';
+import { addScheduleActions } from '../../modules/addSchedule';
 
 export const mapStateToProps = (state: AppStore) => {
   return {
@@ -19,16 +20,21 @@ export const mapDispatchToProps = (dispatch: Dispatch<Action>) => {
     fetchSchedule: (props: CalendarMonth) => {
       dispatch(scheduleActions.fetchScheduleItem(props));
     },
+    addScheduleOpen: () => {
+      dispatch(addScheduleActions.openDialog());
+    },
   };
 };
 
 type stateProps = ReturnType<typeof mapStateToProps>;
 type dispatchProps = ReturnType<typeof mapDispatchToProps>;
+
 const mergeProps = (stateProps: stateProps, dispatchProps: dispatchProps) => {
   const {
     calendar: month,
     scheduleList: { scheduleItemList: scheduleItemList },
   } = stateProps;
+
   const calendar = setSchedule(createCalendar(month), scheduleItemList);
 
   return {
