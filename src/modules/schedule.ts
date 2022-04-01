@@ -11,6 +11,8 @@ export interface ScheduleItem {
   description: string;
 }
 
+export type AddScheduleItem = Omit<ScheduleItem, 'id'>;
+
 export type DeleteSchedule = Pick<ScheduleItem, 'id'>;
 
 export interface ErrorSchedule {
@@ -21,9 +23,15 @@ export interface ErrorSchedule {
 const actionCreator = actionCreatorFacory();
 export const scheduleActions = {
   fetchScheduleItem: actionCreator<CalendarMonth>('FETCH_SCHEDULE_ITEM'),
-  addScheduleItem: actionCreator<ScheduleItem>('ADD_SCHEDULE_ITEM'),
-  setScheduleItemList: actionCreator<ScheduleItem[]>('SET_SCHEDULE_ITEM_LIST'),
+  addScheduleItem: actionCreator<AddScheduleItem>('ADD_SCHEDULE_ITEM'),
+  setFetchScheduleItemList: actionCreator<ScheduleItem[]>(
+    'SET_FETCH_SCHEDULE_ITEM'
+  ),
+  setScheduleItem: actionCreator<ScheduleItem>('SET_SCHEDULE_ITEM_LIST'),
   deleteScheduleItem: actionCreator<DeleteSchedule>('DELETE_SCHEDUL_ITEM'),
+  setDeletedScheduleItemList: actionCreator<ScheduleItem[]>(
+    'SET_DELETED_SCHEDULE_ITEM_LIST'
+  ),
   setLoadingSchedule: actionCreator('SETLOADING_SCHEDULE'),
   AsyncFailureSchedule: actionCreator<ErrorSchedule>('ASYNCFAILURE_SCHEDULE'),
   ResetErrorSchedule: actionCreator('RESETERROR_SCHEDULE'),
@@ -44,15 +52,29 @@ const initialState: ScheduleInititalStateProps = {
 };
 
 export const scheduleReducer = reducerWithInitialState(initialState)
-  .case(scheduleActions.setScheduleItemList, (state, scheduleItemList) => ({
+  .case(scheduleActions.setScheduleItem, (state, scheduleItem) => ({
     ...state,
     isLoading: false,
-    scheduleItemList,
+    scheduleItemList: [...state.scheduleItemList, scheduleItem],
   }))
   .case(scheduleActions.addScheduleItem, (state, scheduleItem) => ({
     ...state,
     scheduleList: [...state.scheduleItemList, scheduleItem],
   }))
+  .case(
+    scheduleActions.setFetchScheduleItemList,
+    (state, scheduleItemList) => ({
+      ...state,
+      scheduleItemList,
+    })
+  )
+  .case(
+    scheduleActions.setDeletedScheduleItemList,
+    (state, scheduleItemList) => ({
+      ...state,
+      scheduleItemList,
+    })
+  )
   .case(scheduleActions.setLoadingSchedule, (state) => ({
     ...state,
     isLoading: true,

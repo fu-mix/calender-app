@@ -18,7 +18,7 @@ interface CalendarElementProps {
   scheduleList: ScheduleItem[];
   onClickSchedule: (
     schedule: ScheduleItem,
-    e: React.MouseEvent<HTMLElement, MouseEvent>
+    e: React.MouseEvent<HTMLElement>
   ) => void;
 }
 

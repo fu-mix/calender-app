@@ -1,28 +1,23 @@
 import React from 'react';
 import CalendarBoard from './CalenderBord/container/calendarBoard';
-import Schedule from './Schedule/components/schedule';
+// import Schedule from './Schedule/components/schedule';
 import { ScheduleItem } from './modules/schedule';
+import AddScheduleDialog from './AddSchedlDialog/container/AddScheduleDialog';
+import CurrentSchduleDialog from './CurrentScheduleDialog/container/CurrentScheduleDialog';
+import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import DateAdapter from '@date-io/dayjs';
 import dayjs from 'dayjs';
 
-const handleOnclick = (schedule: ScheduleItem) => {
-  console.log('test', schedule);
-};
 const today = dayjs();
-const dummy = {
-  id: 1,
-  date: today,
-  title: 'React meeting!',
-  location: 'tokyo',
-  description: 'react',
-} as ScheduleItem;
 
 const App: React.FC = () => {
   return (
-    <>
+    <MuiPickersUtilsProvider utils={DateAdapter}>
       <div>Calendar</div>
       <CalendarBoard />
-      <Schedule schedule={dummy} onClickSchedule={() => handleOnclick(dummy)} />
-    </>
+      <AddScheduleDialog />
+      <CurrentSchduleDialog />
+    </MuiPickersUtilsProvider>
   );
 };
 export default App;

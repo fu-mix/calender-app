@@ -6,7 +6,7 @@ interface ScheduleProps {
   schedule: ScheduleItem;
   onClickSchedule: (
     schedule: ScheduleItem,
-    e: React.MouseEvent<HTMLElement, MouseEvent>
+    e: React.MouseEvent<HTMLElement>
   ) => void;
 }
 
@@ -17,7 +17,9 @@ export const Schedule: React.FC<ScheduleProps> = ({
   return (
     <div
       className={style.schedule}
-      onClick={(e) => onClickSchedule(schedule, e)}>
+      onClick={(e) => {
+        onClickSchedule(schedule, e);
+      }}>
       {schedule.title}
     </div>
   );

@@ -7,6 +7,9 @@ import { Dispatch, Action } from 'redux';
 import { setSchedule } from '../../util/schedule';
 import { createCalendar } from '../../util/calendar';
 import { addScheduleActions } from '../../modules/addSchedule';
+import { currentScheduleActions } from '../../modules/currentSchedule';
+import { AddScheduleItem, ScheduleItem } from '../../modules/schedule';
+import dayjs from 'dayjs';
 
 export const mapStateToProps = (state: AppStore) => {
   return {
@@ -20,8 +23,13 @@ export const mapDispatchToProps = (dispatch: Dispatch<Action>) => {
     fetchSchedule: (props: CalendarMonth) => {
       dispatch(scheduleActions.fetchScheduleItem(props));
     },
-    addScheduleOpen: () => {
+    openAddScheduleDialog: (d: dayjs.Dayjs) => {
       dispatch(addScheduleActions.openDialog());
+      dispatch(addScheduleActions.setScheduleFromCal({ date: d }));
+    },
+    openCurrentScheduleDialog: (schedule: ScheduleItem) => {
+      dispatch(currentScheduleActions.CurrentScheduleSetItem(schedule));
+      dispatch(currentScheduleActions.CurrentScheduleOpenDialog());
     },
   };
 };

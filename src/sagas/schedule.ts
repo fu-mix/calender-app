@@ -4,6 +4,7 @@ import {
   scheduleActions,
   ScheduleItem,
   DeleteSchedule,
+  AddScheduleItem,
 } from '../modules/schedule';
 import { CalendarMonth } from '../modules/calendar';
 import { Action } from 'typescript-fsa';
@@ -13,7 +14,7 @@ import { AppStore } from '../modules/index';
 const API_URL = 'http://localhost:8080/api';
 
 const getSchedule = (month: number, year: number) => {
-  const REQUEST_URL = `${API_URL}/schedules?month=${month.toString}&year=${year.toString}`;
+  const REQUEST_URL = `${API_URL}/schedules?month=${month}&year=${year}`;
   return axios
     .get(REQUEST_URL)
     .then((res) => {
@@ -34,16 +35,19 @@ function* fetchSchedule(action: Action<CalendarMonth>) {
     );
 
     const formatedSchedule = result.map((r) => formatSchedule(r));
-    yield put(scheduleActions.setScheduleItemList(formatedSchedule));
+    yield put(scheduleActions.setFetchScheduleItemList(formatedSchedule));
   } catch (e) {
     yield put(scheduleActions.AsyncFailureSchedule(e.message));
   }
 }
 
-const addSchedule = (scheduleItem: ScheduleItem) => {
+const addSchedule = (scheduleItem: AddScheduleItem) => {
   const REQUEST_URL = `${API_URL}/schedules`;
   return axios
-    .post(REQUEST_URL, { ...scheduleItem })
+    .post(REQUEST_URL, {
+      ...scheduleItem,
+      date: scheduleItem.date.toISOString(),
+    })
     .then((res) => {
       return res.data;
     })
@@ -52,13 +56,13 @@ const addSchedule = (scheduleItem: ScheduleItem) => {
     });
 };
 
-function* addScheduleItem(action: Action<ScheduleItem>) {
+function* addScheduleItem(action: Action<AddScheduleItem>) {
   yield put(scheduleActions.setLoadingSchedule());
   try {
     const result: ScheduleItem = yield call(addSchedule, action.payload);
-
     const newSchedule = formatSchedule(result);
-    yield put(scheduleActions.addScheduleItem(newSchedule));
+
+    yield put(scheduleActions.setScheduleItem(newSchedule));
   } catch (e) {
     yield put(scheduleActions.AsyncFailureSchedule(e.message));
   }
@@ -86,7 +90,7 @@ function* deleteScheduleItem(action: Action<DeleteSchedule>) {
     const newScheduleList = currentSchedule.filter(
       (s) => s.id !== action.payload.id
     );
-    yield put(scheduleActions.setScheduleItemList(newScheduleList));
+    yield put(scheduleActions.setDeletedScheduleItemList(newScheduleList));
   } catch (e) {
     yield put(scheduleActions.AsyncFailureSchedule(e.message));
   }
