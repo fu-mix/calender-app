@@ -1,4 +1,4 @@
-import Navigation from '../components/Navigation';
+import { Navigation } from '../components/Navigation';
 import { connect } from 'react-redux';
 import { calendarActions, CalendarMonth } from '../../modules/calendar';
 import { scheduleActions } from '../../modules/schedule';
@@ -11,6 +11,7 @@ import {
   formatMonth,
 } from '../../util/calendar';
 import dayjs from 'dayjs';
+import { scryRenderedComponentsWithType } from 'react-dom/test-utils';
 
 const mapStateToProps = (state: AppStore) => ({ calendar: state.calendar });
 
@@ -44,13 +45,15 @@ const mergeProps = (stateProps: StateProps, dispatchProps: DispatchProps) => {
       setMonthDispatch(previousMonth);
       fetchItem(previousMonth);
     },
-    setMonth: (dayObj: dayjs.Dayjs) => {
-      const month = formatMonth(dayObj);
+    setMonth: (dayObj: dayjs.Dayjs | null) => {
+      const month =
+        dayObj == null ? { month: 0, year: 0 } : formatMonth(dayObj);
       setMonthDispatch(month);
       fetchItem(month);
     },
   };
 };
+export type NavigationProps = ReturnType<typeof mergeProps>;
 
 export default connect(
   mapStateToProps,

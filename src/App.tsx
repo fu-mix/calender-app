@@ -7,13 +7,14 @@ import CurrentSchduleDialog from './CurrentScheduleDialog/container/CurrentSched
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateAdapter from '@date-io/dayjs';
 import dayjs from 'dayjs';
+import Navigation from './Navigation/container/Navigation';
 
 const today = dayjs();
 
 const App: React.FC = () => {
   return (
     <MuiPickersUtilsProvider utils={DateAdapter}>
-      <div>Calendar</div>
+      <Navigation />
       <CalendarBoard />
       <AddScheduleDialog />
       <CurrentSchduleDialog />

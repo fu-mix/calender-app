@@ -36,7 +36,7 @@ function* fetchSchedule(action: Action<CalendarMonth>) {
 
     const formatedSchedule = result.map((r) => formatSchedule(r));
     yield put(scheduleActions.setFetchScheduleItemList(formatedSchedule));
-  } catch (e) {
+  } catch (e: any) {
     yield put(scheduleActions.AsyncFailureSchedule(e.message));
   }
 }
@@ -63,7 +63,7 @@ function* addScheduleItem(action: Action<AddScheduleItem>) {
     const newSchedule = formatSchedule(result);
 
     yield put(scheduleActions.setScheduleItem(newSchedule));
-  } catch (e) {
+  } catch (e: any) {
     yield put(scheduleActions.AsyncFailureSchedule(e.message));
   }
 }
@@ -91,7 +91,7 @@ function* deleteScheduleItem(action: Action<DeleteSchedule>) {
       (s) => s.id !== action.payload.id
     );
     yield put(scheduleActions.setDeletedScheduleItemList(newScheduleList));
-  } catch (e) {
+  } catch (e: any) {
     yield put(scheduleActions.AsyncFailureSchedule(e.message));
   }
 }

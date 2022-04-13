@@ -9,19 +9,6 @@ import AddScheduleDialog from '../../AddSchedlDialog/container/AddScheduleDialog
 
 const days = ['日', '月', '火', '水', '木', '金', '土'];
 
-const now = dayjs('2021-09-29');
-// const dummy_schedule = {
-//   id: 1,
-//   date: now,
-//   title: 'React meeting',
-//   location: 'tokyo',
-//   description: 'react',
-// } as ScheduleItem;
-
-// const handleOnclick = (schedule: ScheduleItem) => {
-//   console.log(schedule);
-// };
-
 export const CalendarBoard: React.FC<CalendarBoardProps> = ({
   fetchSchedule,
   calendar,
