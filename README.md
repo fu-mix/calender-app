@@ -1,46 +1,190 @@
-# Getting Started with Create React App
+# Calendar アプリ　仕様
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# コンポーネント
 
-## Available Scripts
+- Navigation
+  - タイトル
+  - 月切り替え(ページネーション)
+  - 現在の月表示と切り替え
+- Calendar Board
+  - 日(calendar element)をグリッド形式で表示
+- Calendar Element
+  - 曜日表示(一行目のみ)
+  - 今日の日付強調(今日の日付は丸で囲まれて表示)
+  - 日付の表示
+  - スケジュールの表示
+- Modal
+  - スケジュールの入力用
+  - 曜日は選択された日付がデフォルトで表示
+- Schedule
+  - 渡された予定を表示する
+  - 選択するとスケジュール入力モーダルを表示する
 
-In the project directory, you can run:
+# インターフェース
 
-### `yarn start`
+- Navigation
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+| name   | type   |
+| ------ | ------ |
+| titile | string |
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- Calendar Borad
+- Calendar Element
 
-### `yarn test`
+| name  | type   |
+| ----- | ------ |
+| year  | string |
+| month | string |
+| date  | string |
+| day   | string |
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Modal
 
-### `yarn build`
+| name  | type   |
+| ----- | ------ |
+| year  | string |
+| month | string |
+| date  | string |
+| day   | string |
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- Schedule
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+| name     | type   |
+| -------- | ------ |
+| schedule | string |
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- CalendarElement
+  | name | type |
+  | --------------- | ----------- |
+  | day | dayjs.Dayjs |
+  | month | dayjs.Dayjs |
+  | schedules | Schedule[] |
+  | onClickSchedule | ()=>fn(date:ISOString) |
 
-### `yarn eject`
+# types
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+- スケジュール情報
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```ts
+interface Schedule {
+  id: number{
+  date: ISOString;
+  title: string;
+  location: string;
+  description: string;
+  }
+}
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+```ts
+interface ScheduleData {
+  schedules: Schedule[];
+}
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+# store
 
-## Learn More
+- 構造
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```ts
+intarface AppState
+{
+  cache:{
+    schedules:Schdule[]
+  },
+  cal_board:{
+    schedules:Schedule[];
+    modalOpen:boolen
+  }
+}
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```
+
+- 初期値
+
+```ts
+const initialState {
+  cache:{
+    schedules: []
+  },
+  cal_board:{
+    schedules:[];
+    modalOpen:false
+  }
+} as ScheduleData
+```
+
+# バックエンド
+
+下記のバックエンドアプリを利用。
+後々は GraphQL で作り直したい。
+https://github.com/Dragon-taro/calender-app/tree/master/server
+
+## 仕様
+
+### 特定の月の予定を全件取得
+
+```
+GET /schedules
+```
+
+### パラメーター
+
+| name  | type   | require |
+| ----- | ------ | ------- |
+| month | number | yes     |
+| year  | number | yes     |
+
+### 例
+
+```
+$ curl -X GET "localhost:8080/api/schedules?month=1&year=2021"
+```
+
+### 予定の追加
+
+```
+POST /schedules
+```
+
+### パラメーター
+
+| name        | type      | require |
+| ----------- | --------- | ------- |
+| title       | string    | yes     |
+| data        | ISOString | yes     |
+| description | string    | no      |
+| location    | string    | no      |
+
+### 例
+
+```
+$ curl -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"title": "会議", "description": "経営戦略について", "date": "2019-11-11T15:54:14.000Z", "location": "会議室A"}' \
+  "localhost:8080/api/schedules"
+```
+
+### 予定の削除
+
+```
+DELETE /schedules/:id
+```
+
+### パラメーター
+
+| name | type   | require |
+| ---- | ------ | ------- |
+| id   | number | yes     |
+
+### 例
+
+```
+$ curl "localhost:8080/api/schedules/1
+```
+
+### サンプルデータの追加
+
+```
+$ curl -X POST "localhost:8080/api/schedules/create-test-data"
+```

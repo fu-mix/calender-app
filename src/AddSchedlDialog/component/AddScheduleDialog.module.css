@@ -1,0 +1,15 @@
+.spacer {
+  margin: '4px 0';
+}
+
+.title {
+  font-size: 22;
+}
+
+.closeButton {
+  text-align: right;
+}
+
+.validation {
+  height: 32px;
+}
