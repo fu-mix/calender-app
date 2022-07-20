@@ -6,8 +6,10 @@ import { CalendarElement } from '../../CalenderElement/components/calendarElemen
 import dayjs from 'dayjs';
 import style from './calendarBoard.module.css';
 import AddScheduleDialog from '../../AddSchedlDialog/container/AddScheduleDialog';
+import { scheduleSelectors } from '../../recoil/selector/scheduleFetchResult';
 
 const days = ['日', '月', '火', '水', '木', '金', '土'];
+const { useFetchSchedule } = scheduleSelectors;
 
 export const CalendarBoard: React.FC<CalendarBoardProps> = ({
   fetchSchedule,
@@ -23,6 +25,9 @@ export const CalendarBoard: React.FC<CalendarBoardProps> = ({
   const onClickAddSchedule = useCallback((date: dayjs.Dayjs) => {
     openAddScheduleDialog(date);
   }, []);
+
+  const scheduleFetchResult = useFetchSchedule(month);
+  console.log('scheduleFetchResult', scheduleFetchResult);
 
   return (
     <div className={style.container}>
